@@ -1,0 +1,15 @@
+{
+  "NavBar": {
+    "ariaLabel": "Navigation principale",
+    "home": "Accueil",
+    "shop": "Boutique",
+    "custom": "Sur-mesure",
+    "toggleTheme": "Changer de thème"
+  },
+  "Home": {
+    "title": "Bienvenue sur Lubna ✨",
+    "description": "Next.js est prêt. On va ajouter i18n, Dark Mode et les pages."
+  },
+  "Boutique": {"title": "Boutique"},
+  "SurMesure": {"title": "Sur-mesure"}
+}
