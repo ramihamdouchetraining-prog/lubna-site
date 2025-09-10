@@ -21,3 +21,5 @@ yarn-error.log*
 *.swp
 .vercel/
 coverage/
+node_modules
+.next
