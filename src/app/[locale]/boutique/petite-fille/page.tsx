@@ -1,20 +1,25 @@
-import {getTranslations, setRequestLocale} from 'next-intl/server';
-import {getProductsLocalized} from '@/lib/api/catalog';
-import {ProductCard} from '@/components/ProductCard';
+import { fetchProductsByCategorySlug } from '@/lib/api/catalog';
+import { getTranslations } from 'next-intl/server';
+import { ProductCard } from '@/components/ProductCard';
 
-export const revalidate = 0;
-
-export default async function GirlsPage({params}:{params: Promise<{locale:'fr'|'en'|'ar'}>}){
-  const {locale} = await params;
-  setRequestLocale(locale);
+export default async function Page({ params }: { params: { locale: string } }) {
+  const { locale } = params;
   const t = await getTranslations('categories');
-  const products = await getProductsLocalized(locale, {category_slug: 'petite-fille'}).catch(()=>[]);
+  const list = await fetchProductsByCategorySlug('petite-fille', locale);
+  const dir = locale === 'ar' ? 'rtl' : 'ltr';
+
   return (
-    <main className="p-6 space-y-4">
-      <h1 className="text-2xl font-heading">{t('girls')}</h1>
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map(p => (<ProductCard key={p.id} p={p as any} />))}
-      </div>
-    </main>
+    <div className="space-y-6" dir={dir}>
+      <h1 className="text-2xl font-bold">{t('girls')}</h1>
+      {list.length === 0 ? (
+        <p className="text-muted-foreground">No items yet.</p>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {list.map(p => (
+            <ProductCard key={p.id} name={p.t?.name || ''} subtitle={p.t?.subtitle || ''} price_cents={p.price_cents} media={p.media || undefined} dir={dir as any} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

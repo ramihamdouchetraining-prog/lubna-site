@@ -1,18 +1,25 @@
 import Image from 'next/image';
 
-export function ProductCard({p}:{p:{sku:string; name:string; subtitle?:string|null; price_cents:number; currency:string; media?:{storage_path:string;alt:string|null}[]}}){
-  const img = p.media?.[0]?.storage_path;
-  const price = new Intl.NumberFormat(undefined, {style:'currency', currency:p.currency||'EUR'}).format((p.price_cents||0)/100);
+type Props = {
+  name: string;
+  subtitle?: string;
+  price_cents: number;
+  media?: { src?: string; alt?: string };
+  dir?: 'ltr' | 'rtl';
+};
+
+export function ProductCard({ name, subtitle, price_cents, media, dir = 'ltr' }: Props) {
+  const price = (price_cents / 100).toFixed(2) + ' €';
   return (
-    <div className="rounded-xl border p-3 hover:shadow-md transition">
-      {img && (
-        <div className="aspect-[4/3] relative mb-3 overflow-hidden rounded-lg">
-          <Image src={img} alt={p.media?.[0]?.alt || p.name} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover" />
+    <article className="rounded-lg border p-4 hover:shadow-md transition" dir={dir}>
+      {media?.src && (
+        <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-md bg-muted">
+          <Image src={media.src} alt={media.alt || name} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
         </div>
       )}
-      <div className="text-sm font-medium line-clamp-2">{p.name}</div>
-      {p.subtitle && <div className="text-xs text-muted-foreground line-clamp-2">{p.subtitle}</div>}
-      <div className="mt-2 text-sm font-semibold">{price}</div>
-    </div>
+      <h3 className="font-semibold">{name}</h3>
+      {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+      <p className="mt-2 font-medium">{price}</p>
+    </article>
   );
 }

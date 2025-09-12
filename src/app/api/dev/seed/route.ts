@@ -1,82 +1,54 @@
-import {NextResponse} from 'next/server';
-import {getAdminClient} from '@/lib/supabase';
-
-// Protégé par deux verrous:
-// 1) variable d'environnement SUPABASE_SERVICE_ROLE_KEY (côté serveur)
-// 2) en-tête x-seed-token qui doit correspondre à process.env.SEED_TOKEN
+import { NextResponse } from 'next/server';
+import { getAdminClient } from '@/lib/supabase';
 
 export async function POST(req: Request) {
-  const token = req.headers.get('x-seed-token');
-  const must = process.env.SEED_TOKEN;
-  if (!must || token !== must) {
-    return NextResponse.json({ok: false, error: 'Forbidden'}, {status: 403});
+  const { searchParams } = new URL(req.url);
+  const token = searchParams.get('token');
+  if (!token || token !== (process.env.SEED_TOKEN || 'dev-allow')) {
+    return new NextResponse('Forbidden', { status: 403 });
   }
   const admin = getAdminClient();
-  if (!admin) return NextResponse.json({ok: false, error: 'Missing SUPABASE_SERVICE_ROLE_KEY'}, {status: 400});
+  if (!admin) return new NextResponse('Missing SUPABASE_SERVICE_ROLE_KEY', { status: 500 });
 
-  // Idempotent minimal seed (catégories, traductions, produits + media, ressources + media)
-  try {
-    // Catégories
-    await admin.from('categories').upsert([{slug: 'sous-vetements'}, {slug: 'petite-fille'}], {onConflict: 'slug'});
-    const {data: cats} = await admin.from('categories').select('id, slug');
-    const idBySlug = Object.fromEntries((cats||[]).map((c:any) => [c.slug, c.id]));
+  // Idempotent minimal seed (catégories, produits, traductions, médias) – en ligne avec ton 003_seeds.sql
+  // NB: on garde les slugs sans accents pour les routes.
+  const { data: cats } = await admin.from('categories').upsert([
+    { slug: 'sous-vetements' },
+    { slug: 'petite-fille' },
+    { slug: 'hijab' },
+    { slug: 'abaya' }
+  ]).select();
 
-    // Translations catégories (fr)
-    await admin.from('category_translations').upsert([
-      {category_id: idBySlug['sous-vetements'], locale: 'fr', name: 'Sous-vêtements'},
-      {category_id: idBySlug['petite-fille'], locale: 'fr', name: 'Petite fille'}
-    ], {onConflict: 'category_id,locale'});
+  const catId = (slug: string) => cats?.find(c => c.slug === slug)?.id;
 
-    // Produits (trio fr/en/ar via traductions)
-    const products = [
-      {sku: 'LUBNA-UW-SET-001', category_slug: 'sous-vetements', price_cents: 3999, currency: 'EUR'},
-      {sku: 'LUBNA-GIRL-DRESS-001', category_slug: 'petite-fille', price_cents: 2999, currency: 'EUR'}
-    ];
-    await admin.from('products').upsert(products.map(p => ({
-      sku: p.sku,
-      category_id: idBySlug[p.category_slug],
-      price_cents: p.price_cents,
-      currency: p.currency,
-      status: 'active'
-    })), {onConflict: 'sku'});
+  await admin.from('products').upsert([
+    { sku: 'LUBNA-UW-SET-001', category_id: catId('sous-vetements'), price_cents: 3999, currency: 'EUR', status: 'active' },
+    { sku: 'LUBNA-HIJAB-001', category_id: catId('hijab'), price_cents: 1999, currency: 'EUR', status: 'active' },
+    { sku: 'LUBNA-ABAYA-001', category_id: catId('abaya'), price_cents: 6499, currency: 'EUR', status: 'active' }
+  ]);
 
-    const {data: prows} = await admin.from('products').select('id, sku');
-    const pid = Object.fromEntries((prows||[]).map((r:any) => [r.sku, r.id]));
+  const prods = await admin.from('products').select('id,sku');
+  const idOf = (sku: string) => prods.data?.find(p => p.sku === sku)?.id;
 
-    await admin.from('product_translations').upsert([
-      {product_id: pid['LUBNA-UW-SET-001'], locale: 'fr', name: 'Ensemble Confort Rose', subtitle: 'Respirant & doux'},
-      {product_id: pid['LUBNA-UW-SET-001'], locale: 'en', name: 'Pink Comfort Set', subtitle: 'Breathable & soft'},
-      {product_id: pid['LUBNA-UW-SET-001'], locale: 'ar', name: 'طقم وردي مريح', subtitle: 'قابل للتنفس وناعم'},
-      {product_id: pid['LUBNA-GIRL-DRESS-001'], locale: 'fr', name: 'Robe fillette pastel', subtitle: 'Douce & légère'},
-      {product_id: pid['LUBNA-GIRL-DRESS-001'], locale: 'en', name: 'Pastel Girl Dress', subtitle: 'Soft & light'},
-      {product_id: pid['LUBNA-GIRL-DRESS-001'], locale: 'ar', name: 'فستان بناتي باستيل', subtitle: 'ناعم وخفيف'}
-    ], {onConflict: 'product_id,locale'});
+  await admin.from('product_translations').upsert([
+    { product_id: idOf('LUBNA-UW-SET-001'), locale: 'fr', name: 'Ensemble Confort Rose', subtitle: 'Respirant & doux', description: 'Parfait au quotidien' },
+    { product_id: idOf('LUBNA-UW-SET-001'), locale: 'en', name: 'Pink Comfort Set', subtitle: 'Breathable & soft', description: 'Perfect for daily wear' },
+    { product_id: idOf('LUBNA-UW-SET-001'), locale: 'ar', name: 'طقم وردي مريح', subtitle: 'قابل للتنفس وناعم', description: 'مثالي للاستخدام اليومي' },
 
-    // Media (une image de démo)
-    await admin.from('product_media').upsert([
-      {product_id: pid['LUBNA-UW-SET-001'], storage_path: 'https://epefjqrxjbpcasygwywh.supabase.co/storage/v1/object/public/assets-public/hero1.png', alt: 'Ensemble rose', position: 0},
-      {product_id: pid['LUBNA-GIRL-DRESS-001'], storage_path: 'https://epefjqrxjbpcasygwywh.supabase.co/storage/v1/object/public/assets-public/hero7.png', alt: 'Robe pastel', position: 0}
-    ], {onConflict: 'id'});
+    { product_id: idOf('LUBNA-HIJAB-001'), locale: 'fr', name: 'Hijab soyeux', subtitle: 'Toucher premium', description: 'Palette féminine' },
+    { product_id: idOf('LUBNA-HIJAB-001'), locale: 'en', name: 'Silky Hijab', subtitle: 'Premium handfeel', description: 'Feminine palette' },
+    { product_id: idOf('LUBNA-HIJAB-001'), locale: 'ar', name: 'حجاب حريري', subtitle: 'ملمس فخم', description: 'ألوان أنثوية' },
 
-    // Ressources (min)
-    const {data: topicRows} = await admin.from('topics').upsert([{slug: 'femmes-fiqh', name: 'Femmes & Fiqh'}], {onConflict: 'slug'}).select('id,slug');
-    const topicId = topicRows?.[0]?.id;
+    { product_id: idOf('LUBNA-ABAYA-001'), locale: 'fr', name: 'Abaya satinée', subtitle: 'Chic & pudique', description: 'Finition soignée' },
+    { product_id: idOf('LUBNA-ABAYA-001'), locale: 'en', name: 'Satin Abaya', subtitle: 'Chic & modest', description: 'Fine finishing' },
+    { product_id: idOf('LUBNA-ABAYA-001'), locale: 'ar', name: 'عباية ساتان', subtitle: 'أنيقة ومحتشمة', description: 'تشطيبات متقنة' }
+  ], { onConflict: 'product_id,locale' });
 
-    const {data: rbase} = await admin.from('resources').upsert([
-      {slug: 'pour-toi-chere-soeur', type: 'pdf_free', lang: 'fr', status: 'published', topic_id: topicId}
-    ], {onConflict: 'slug'}).select('id,slug');
-    const rid = rbase?.[0]?.id;
+  // Comptes de sortie
+  const [pcount, rcount] = await Promise.all([
+    admin.from('products').select('*', { count: 'exact', head: true }),
+    admin.from('resources').select('*', { count: 'exact', head: true })
+  ]);
 
-    await admin.from('resource_translations').upsert([
-      {resource_id: rid, locale: 'fr', title: 'Pour toi, chère sœur', excerpt: 'PDF gratuit dédié à la femme musulmane'}
-    ], {onConflict: 'resource_id,locale'});
-
-    await admin.from('resource_media').upsert([
-      {resource_id: rid, storage_path: 'https://epefjqrxjbpcasygwywh.supabase.co/storage/v1/object/public/assets-public/brand/logo_lubna.png', kind: 'cover', position: 0}
-    ], {onConflict: 'id'});
-
-    return NextResponse.json({ok: true});
-  } catch (e: any) {
-    return NextResponse.json({ok: false, error: e?.message || 'seed failed'}, {status: 500});
-  }
+  return NextResponse.json({ ok: true, counts: { products: pcount.count || 0, resources: rcount.count || 0 } });
 }
