@@ -20,21 +20,25 @@ export async function generateMetadata({params}:{params: Promise<{locale:string}
 }
 
 export default async function Home({params}:{params: Promise<{locale:string}>}){
+  const HeroSlides = (await import('@/src/components/HeroSlides')).default;
   const {locale} = await params;
   setRequestLocale(locale);
   const t = await getTranslations('Home');
   const c = await getTranslations('Categories');
   return (
-    <main>
-      <Hero />
-      <section className="mx-auto max-w-6xl p-6">
-        <h2 className="font-heading text-2xl mb-4">{t('featuredTitle')}</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Card href="/boutique/sous-vetements" title={c('underwear')} subtitle={c('underwearSub')} />
-          <Card href="/boutique/petite-fille" title={c('girls')} subtitle={c('girlsSub')} />
-        </div>
-      </section>
-    </main>
+    <>
+      <HeroSlides />
+      <main>
+        <Hero />
+        <section className="mx-auto max-w-6xl p-6">
+          <h2 className="font-heading text-2xl mb-4">{t('featuredTitle')}</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Card href="/boutique/sous-vetements" title={c('underwear')} subtitle={c('underwearSub')} />
+            <Card href="/boutique/petite-fille" title={c('girls')} subtitle={c('girlsSub')} />
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
 
