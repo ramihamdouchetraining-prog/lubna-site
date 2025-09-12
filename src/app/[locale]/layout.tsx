@@ -1,54 +1,41 @@
-import './globals.css';
-import type {ReactNode} from 'react';
-import {NextIntlClientProvider} from 'next-intl';
-import {getMessages, getTranslations, setRequestLocale} from 'next-intl/server';
-import Link from 'next/link';
-import type {Metadata} from 'next';
-import {LanguageSwitcher} from '@/components/LanguageSwitcher';
-
-export const metadata: Metadata = {
-  title: 'Lubna',
-  description: 'Boutique féminine & sur-mesure'
-};
+import "./globals.css";
+import type {ReactNode} from "react";
+import {NextIntlClientProvider} from "next-intl";
+import {getMessages, setRequestLocale} from "next-intl/server";
+import Link from "next/link";
+import {LanguageSwitcher} from "@/components/LanguageSwitcher";
 
 export default async function LocaleLayout({
   children,
   params
 }: {
   children: ReactNode;
-  params: Promise<{locale: string}>;
+  params: Promise<{ locale: string }>;
 }) {
   const {locale} = await params;
   setRequestLocale(locale);
-
-  // Messages for this request (provided by next-intl plugin + src/i18n/request.ts)
   const messages = await getMessages();
-  // Server translations for header/nav
-  const tNav = await getTranslations('Nav');
-
-  const dir = locale === 'ar' ? 'rtl' : 'ltr';
+  const isRTL = locale === "ar";
+  const nav = (messages as any).nav || {};
+  const brand = (messages as any).common?.brand || "Lubna";
 
   return (
-    <html lang={locale} dir={dir} suppressHydrationWarning>
-      <body className="min-h-dvh">
+    <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
+      <body className={isRTL ? "font-arabic" : ""}>
         <NextIntlClientProvider messages={messages}>
-          <header className="p-4 border-b sticky top-0 z-40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center gap-6">
-            <Link href={`/${locale}`} className="flex items-center gap-2 font-bold">
-              {/* Logo depuis Supabase public */}
-              <img src="https://epefjqrxjbpcasygwywh.supabase.co/storage/v1/object/public/assets-public/logo_lubna.png" alt={tNav('brand')} className="h-6 w-auto" />
-              <span>{tNav('brand')}</span>
-            </Link>
-            <nav className="flex gap-4">
-              <Link href={`/${locale}/boutique/sous-vetements`}>{tNav('underwear')}</Link>
-              <Link href={`/${locale}/boutique/petite-fille`}>{tNav('girls')}</Link>
-              <Link href={`/${locale}/savoir-ressources`}>{tNav('knowledge')}</Link>
-            </nav>
-            <div className="ml-auto">
-              <LanguageSwitcher />
+          <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="mx-auto flex h-12 max-w-6xl items-center gap-4 px-4">
+              <Link href={`/${locale}`} className="text-sm font-semibold">{brand}</Link>
+              <nav className="ml-auto flex items-center gap-3 text-sm">
+                <Link href={`/${locale}`}>{nav.home ?? "Home"}</Link>
+                <Link href={`/${locale}/boutique/sous-vetements`}>{nav.underwear ?? "Underwear"}</Link>
+                <Link href={`/${locale}/boutique/petite-fille`}>{nav.girls ?? "Girls"}</Link>
+                <Link href={`/${locale}/savoir-ressources`}>{nav.knowledge ?? "Knowledge"}</Link>
+                <LanguageSwitcher />
+              </nav>
             </div>
           </header>
-
-          {children}
+          <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>

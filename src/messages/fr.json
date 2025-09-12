@@ -1,24 +1,22 @@
 {
-  "Home": {
-    "title": "Bienvenue sur Lubna",
-    "tagline": "Boutique féminine & sur-mesure"
+  "common": {
+    "brand": "Lubna"
   },
-  "Nav": {
-    "brand": "Lubna",
+  "nav": {
+    "home": "Accueil",
     "underwear": "Sous-vêtements",
     "girls": "Petite fille",
     "knowledge": "Savoir & ressources"
   },
-  "Lang": {
-    "fr": "Français",
-    "en": "English",
-    "ar": "العربية"
+  "home": {
+    "title": "Bienvenue sur Lubna",
+    "tagline": "Boutique féminine & sur-mesure"
   },
-  "Shop": {
-    "underwearTitle": "Sous-vêtements",
-    "girlsTitle": "Petite fille"
+  "categories": {
+    "underwear": "Sous-vêtements",
+    "girls": "Petite fille"
   },
-  "Knowledge": {
+  "knowledge": {
     "title": "Savoir & ressources"
   }
 }

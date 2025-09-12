@@ -1,4 +1,4 @@
-import {getTranslations} from 'next-intl/server';
+import {getTranslations, setRequestLocale} from 'next-intl/server';
 import {getResources} from '@/lib/api/resources';
 import {ResourceCard} from '@/components/ResourceCard';
 
@@ -6,7 +6,8 @@ export const revalidate = 0;
 
 export default async function KnowledgePage({params}:{params: Promise<{locale:'fr'|'en'|'ar'}>}){
   const {locale} = await params;
-  const t = await getTranslations('Knowledge');
+  setRequestLocale(locale);
+  const t = await getTranslations('knowledge');
   const rows = await getResources(locale).catch(()=>[]);
   return (
     <main className="p-6 space-y-4">
