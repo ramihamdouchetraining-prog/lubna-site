@@ -68,7 +68,9 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {list.map(r => (
-            <ResourceCard key={r.id} title={r.t?.title || ''} excerpt={r.t?.excerpt || ''} type={r.type} cover={r.media?.cover || undefined} pdf={r.media?.pdf || undefined} dir={dir as any} labels={{ read: t('cta.read'), download: t('cta.download'), details: t('cta.details') }} />
+            <a key={r.id} href={`/${locale}/r/${r.slug}`}>
+              <ResourceCard title={r.t?.title || ''} excerpt={r.t?.excerpt || ''} type={r.type} cover={r.media?.cover || undefined} pdf={r.media?.pdf || undefined} dir={dir as any} labels={{ read: t('cta.read'), download: t('cta.download'), details: t('cta.details') }} />
+            </a>
           ))}
         </div>
       )}

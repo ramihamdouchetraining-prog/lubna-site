@@ -22,6 +22,20 @@
   },
   "seo": {
     "home": {"title":"مرحبًا بكِ في لبنى","description":"متجر نسائي وخياطة حسب الطلب."},
-    "knowledge": {"title":"المعرفة والموارد","description":"مختارات من الكتب والفتاوى وملفات PDF."}
+    "knowledge": {"title":"المعرفة والموارد","description":"مختارات من الكتب والفتاوى وملفات PDF."},
+    "product": {"title":"%s | لبنى","description":"اشتري %s من لبنى."},
+    "resource": {"title":"%s | مورد","description":"%s"}
+  },
+  "product": {
+    "details": "تفاصيل المنتج",
+    "notFound": "المنتج غير موجود.",
+    "price": "السعر",
+    "currency": "€",
+    "back": "العودة إلى المتجر"
+  },
+  "resource": {
+    "notFound": "المورد غير موجود.",
+    "download": "تنزيل PDF",
+    "back": "العودة إلى الموارد"
   }
 }

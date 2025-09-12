@@ -60,3 +60,34 @@ export async function fetchResources(params: {
     };
   });
 }
+
+export async function fetchResourceBySlug(locale: string, slug: string) {
+  if (!supabase) return null;
+  const { data: r } = await supabase
+    .from('resources')
+    .select('id,type,slug,lang,status')
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .maybeSingle();
+  if (!r?.id) return null;
+  const [{ data: t }, { data: m }] = await Promise.all([
+    supabase.from('resource_translations').select('title,excerpt').eq('resource_id', r.id).eq('locale', locale).maybeSingle(),
+    supabase.from('resource_media').select('kind,storage_path').eq('resource_id', r.id)
+  ]);
+  return {
+    id: r.id,
+    slug: r.slug,
+    type: r.type,
+    t: t || null,
+    media: {
+      cover: m?.find(x => x.kind === 'cover')?.storage_path || null,
+      pdf: m?.find(x => x.kind === 'pdf')?.storage_path || null
+    }
+  };
+}
+
+export async function fetchResourceSlugs(): Promise<string[]> {
+  if (!supabase) return [];
+  const { data } = await supabase.from('resources').select('slug,status').eq('status', 'published');
+  return (data || []).map(x => x.slug);
+}

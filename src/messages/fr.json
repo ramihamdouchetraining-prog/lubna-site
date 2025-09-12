@@ -22,6 +22,20 @@
   },
   "seo": {
     "home": {"title":"Bienvenue sur Lubna","description":"Boutique féminine & sur-mesure."},
-    "knowledge": {"title":"Savoir & ressources","description":"Sélection de livres, fatwas et PDFs."}
+    "knowledge": {"title":"Savoir & ressources","description":"Sélection de livres, fatwas et PDFs."},
+    "product": {"title":"%s | Lubna","description":"Achetez %s chez Lubna."},
+    "resource": {"title":"%s | Ressource","description":"%s"}
+  },
+  "product": {
+    "details": "Détails du produit",
+    "notFound": "Produit introuvable.",
+    "price": "Prix",
+    "currency": "€",
+    "back": "Retour à la boutique"
+  },
+  "resource": {
+    "notFound": "Ressource introuvable.",
+    "download": "Télécharger le PDF",
+    "back": "Retour aux ressources"
   }
 }

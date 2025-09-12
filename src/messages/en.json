@@ -22,6 +22,20 @@
   },
   "seo": {
     "home": {"title":"Welcome to Lubna","description":"Feminine & bespoke boutique."},
-    "knowledge": {"title":"Knowledge & resources","description":"Curated books, fatwas and PDFs."}
+    "knowledge": {"title":"Knowledge & resources","description":"Curated books, fatwas and PDFs."},
+    "product": {"title":"%s | Lubna","description":"Buy %s at Lubna."},
+    "resource": {"title":"%s | Resource","description":"%s"}
+  },
+  "product": {
+    "details": "Product details",
+    "notFound": "Product not found.",
+    "price": "Price",
+    "currency": "$",
+    "back": "Back to shop"
+  },
+  "resource": {
+    "notFound": "Resource not found.",
+    "download": "Download PDF",
+    "back": "Back to resources"
   }
 }
