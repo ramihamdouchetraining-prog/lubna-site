@@ -1,22 +1,27 @@
 {
-  "common": {
-    "brand": "Lubna"
-  },
-  "nav": {
-    "home": "Home",
-    "underwear": "Underwear",
-    "girls": "Girls",
-    "knowledge": "Knowledge & resources"
-  },
-  "home": {
-    "title": "Welcome to Lubna",
-    "tagline": "Feminine & bespoke boutique"
-  },
-  "categories": {
-    "underwear": "Underwear",
-    "girls": "Girls"
-  },
+  "brand": {"title":"Lubna","tagline":"Feminine & bespoke boutique"},
+  "nav": {"home":"Home","underwear":"Underwear","girls":"Girls","knowledge":"Knowledge"},
+  "categories": {"underwear":"Underwear","girls":"Girls"},
   "knowledge": {
-    "title": "Knowledge & resources"
+    "title": "Knowledge & resources",
+    "intro": "Books, fatwas and helpful free PDFs for sisters.",
+    "filters": {
+      "type": "Type",
+      "all": "All",
+      "book": "Book",
+      "pamphlet": "Pamphlet",
+      "fatwa": "Fatwa",
+      "pdf_free": "Free PDF",
+      "topic": "Topic",
+      "lang": "Language",
+      "search": "Search...",
+      "apply": "Apply"
+    },
+    "cta": {"read":"Read","download":"Download","details":"Details"},
+    "empty": "No resources found yet."
+  },
+  "seo": {
+    "home": {"title":"Welcome to Lubna","description":"Feminine & bespoke boutique."},
+    "knowledge": {"title":"Knowledge & resources","description":"Curated books, fatwas and PDFs."}
   }
 }

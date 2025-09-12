@@ -8,13 +8,13 @@ const baseConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
-  {protocol: 'https', hostname: 'epefjqrxjbpcasygwywh.supabase.co', pathname: '/storage/v1/object/public/**'},
-      {
-        protocol: 'https',
-        hostname: 'epefjqrxjbpcasygwywh.supabase.co'
-      }
+      {protocol: 'https', hostname: 'epefjqrxjbpcasygwywh.supabase.co'}
     ]
+  },
+  experimental: {
+    optimizePackageImports: ['next-intl']
   }
+  // i18n & other config already present
 };
 
 export default withNextIntl(baseConfig);

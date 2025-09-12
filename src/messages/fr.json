@@ -1,22 +1,27 @@
 {
-  "common": {
-    "brand": "Lubna"
-  },
-  "nav": {
-    "home": "Accueil",
-    "underwear": "Sous-vêtements",
-    "girls": "Petite fille",
-    "knowledge": "Savoir & ressources"
-  },
-  "home": {
-    "title": "Bienvenue sur Lubna",
-    "tagline": "Boutique féminine & sur-mesure"
-  },
-  "categories": {
-    "underwear": "Sous-vêtements",
-    "girls": "Petite fille"
-  },
+  "brand": {"title":"Lubna","tagline":"Boutique féminine & sur-mesure"},
+  "nav": {"home":"Accueil","underwear":"Sous-vêtements","girls":"Petite fille","knowledge":"Savoir & ressources"},
+  "categories": {"underwear":"Sous-vêtements","girls":"Petite fille"},
   "knowledge": {
-    "title": "Savoir & ressources"
+    "title": "Savoir & ressources",
+    "intro": "Livres, fatwas et PDFs utiles pour la sœur musulmane.",
+    "filters": {
+      "type": "Type",
+      "all": "Tous",
+      "book": "Livre",
+      "pamphlet": "Brochure",
+      "fatwa": "Fatwa",
+      "pdf_free": "PDF gratuit",
+      "topic": "Thème",
+      "lang": "Langue",
+      "search": "Rechercher...",
+      "apply": "Appliquer"
+    },
+    "cta": {"read":"Lire","download":"Télécharger","details":"Détails"},
+    "empty": "Aucune ressource ne correspond pour le moment."
+  },
+  "seo": {
+    "home": {"title":"Bienvenue sur Lubna","description":"Boutique féminine & sur-mesure."},
+    "knowledge": {"title":"Savoir & ressources","description":"Sélection de livres, fatwas et PDFs."}
   }
 }
