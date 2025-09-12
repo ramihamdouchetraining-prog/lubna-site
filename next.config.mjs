@@ -1,17 +1,13 @@
-import createNextIntlPlugin from 'next-intl/plugin';
-
-// next-intl: point to the request config used at runtime
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseHost = (() => { try { return new URL(supabaseUrl).host; } catch { return undefined; }})();
 
 /** @type {import('next').NextConfig} */
-const baseConfig = {
-  reactStrictMode: true,
+const nextConfig = {
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'images.unsplash.com' },
-      { protocol: 'https', hostname: 'epefjqrxjbpcasygwywh.supabase.co' }
+      ...(supabaseHost ? [{ protocol: 'https', hostname: supabaseHost }] : []),
+      { protocol: 'https', hostname: 'images.unsplash.com' }
     ]
   }
 };
-
-export default withNextIntl(baseConfig);
+export default nextConfig;
