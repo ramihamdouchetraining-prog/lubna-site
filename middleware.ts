@@ -1,12 +1,12 @@
 import createMiddleware from 'next-intl/middleware';
-import intlConfig from './next-intl.config';
 
 export default createMiddleware({
-  locales: intlConfig.locales,
-  defaultLocale: intlConfig.defaultLocale,
-  localePrefix: intlConfig.localePrefix
+  locales: ['fr', 'en', 'ar'],
+  defaultLocale: 'fr',
+  localePrefix: 'always'
 });
 
+// Ne pas intercepter les routes /api ni /_next, ni fichiers statiques
 export const config = {
   matcher: ['/((?!api|_next|.*\\..*).*)']
 };
