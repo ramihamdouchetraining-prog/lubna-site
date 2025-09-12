@@ -8,10 +8,8 @@ const baseConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'epefjqrxjbpcasygwywh.supabase.co'
-      }
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'epefjqrxjbpcasygwywh.supabase.co' }
     ]
   }
 };

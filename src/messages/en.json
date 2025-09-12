@@ -1,5 +1,30 @@
 {
-  "Home": {"title": "Welcome to Lubna", "tagline": "Feminine & custom tailoring"},
-  "Nav": {"brand": "Lubna", "home": "Home", "underwear": "Underwear", "girls": "Girls", "knowledge": "Knowledge & resources"},
-  "Lang": {"fr": "French", "en": "English", "ar": "العربية"}
+  "Home": {
+    "title": "Welcome to Lubna",
+    "tagline": "Modest, feminine and elegant.",
+    "ctaUnderwear": "Underwear",
+    "ctaKnowledge": "Knowledge & resources",
+    "featuredTitle": "Featured",
+    "heroNote": "New collection"
+  },
+  "Nav": {
+    "brand": "Lubna",
+    "home": "Home",
+    "underwear": "Underwear",
+    "girls": "Girls",
+    "knowledge": "Knowledge & resources"
+  },
+  "Lang": {"fr": "French", "en": "English", "ar": "العربية"},
+  "Categories": {
+    "underwear": "Underwear",
+    "underwearSub": "Comfort, support and softness",
+    "girls": "Girls",
+    "girlsSub": "Clothing & shoes for girls"
+  },
+  "SEO": {
+    "home": {
+      "title": "Lubna — Modest & feminine store",
+      "description": "Explore hijabs, abayas, underwear and useful resources."
+    }
+  }
 }

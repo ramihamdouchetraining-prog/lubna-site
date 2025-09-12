@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {useLocale, useTranslations} from 'next-intl';
 import {usePathname} from 'next/navigation';
 import {LanguageSwitcher} from './LanguageSwitcher';
+import ThemeToggle from './ThemeToggle';
 
 export default function SiteHeader(){
   const locale = useLocale();
@@ -19,8 +20,8 @@ export default function SiteHeader(){
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex max-w-6xl items-center gap-4 p-3" dir={isRTL? 'rtl' : 'ltr'}>
-        <Link href={`/${locale}`} className="font-heading text-lg">Lubna</Link>
-        <nav className="ml-auto flex items-center gap-4">
+        <Link href={`/${locale}`} className="font-heading text-lg animate-heart-float" aria-label="Lubna">Lubna</Link>
+        <nav className="ml-auto flex items-center gap-2 sm:gap-4">
           {links.map(n => {
             const href = `/${locale}${n.href === '/' ? '' : n.href}`;
             const active = pathname === href;
@@ -35,6 +36,7 @@ export default function SiteHeader(){
             );
           })}
           <LanguageSwitcher />
+          <ThemeToggle />
         </nav>
       </div>
     </header>

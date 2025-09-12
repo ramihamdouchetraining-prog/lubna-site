@@ -1,5 +1,30 @@
 {
-  "Home": {"title": "Bienvenue sur Lubna", "tagline": "Boutique féminine & sur-mesure"},
-  "Nav": {"brand": "Lubna", "home": "Accueil", "underwear": "Sous-vêtements", "girls": "Petite fille", "knowledge": "Savoir & ressources"},
-  "Lang": {"fr": "Français", "en": "English", "ar": "العربية"}
+  "Home": {
+    "title": "Bienvenue sur Lubna",
+    "tagline": "Mode pudique, féminine et élégante.",
+    "ctaUnderwear": "Sous-vêtements",
+    "ctaKnowledge": "Savoir & ressources",
+    "featuredTitle": "À découvrir",
+    "heroNote": "Nouvelle collection"
+  },
+  "Nav": {
+    "brand": "Lubna",
+    "home": "Accueil",
+    "underwear": "Sous-vêtements",
+    "girls": "Petite fille",
+    "knowledge": "Savoir & ressources"
+  },
+  "Lang": {"fr": "Français", "en": "English", "ar": "العربية"},
+  "Categories": {
+    "underwear": "Sous-vêtements",
+    "underwearSub": "Confort, maintien et douceur",
+    "girls": "Petite fille",
+    "girlsSub": "Vêtements & chaussures pour filles"
+  },
+  "SEO": {
+    "home": {
+      "title": "Lubna — Boutique pudique et féminine",
+      "description": "Découvre nos hijabs, abayas, sous-vêtements et ressources utiles."
+    }
+  }
 }

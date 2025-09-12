@@ -40,3 +40,8 @@ curl -s http://localhost:3000/api/health/supabase | jq .
 curl -X POST -H "x-seed-token: $SEED_TOKEN" http://localhost:3000/api/dev/seed
 ```
 
+
+## Home 5XL — Notes rapides
+- Le **Hero** s’appuie sur des images publiques Supabase (fallback). Si tu changes de bucket/domaine, ajuste `next.config.mjs` (images.remotePatterns).
+- **SEO**: les titres/desc sont dans `src/messages/*` (namespace `SEO.home`).
+- **Thème**: le toggle écrit `lubna-theme` dans `localStorage` et applique `.dark` sur `<html>`.
