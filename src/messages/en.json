@@ -1,15 +1,17 @@
 {
-  "NavBar": {
-    "ariaLabel": "Main navigation",
-    "home": "Home",
-    "shop": "Shop",
-    "custom": "Tailor-made",
-    "toggleTheme": "Toggle theme"
-  },
   "Home": {
-    "title": "Welcome to Lubna ✨",
-    "description": "Next.js is ready. We'll add i18n, Dark Mode and pages."
+    "title": "Welcome to Lubna",
+    "tagline": "Feminine & custom tailoring"
   },
-  "Boutique": {"title": "Shop"},
-  "SurMesure": {"title": "Custom orders"}
+  "Nav": {
+    "brand": "Lubna",
+    "underwear": "Underwear",
+    "girls": "Girls",
+    "knowledge": "Knowledge & resources"
+  },
+  "Lang": {
+    "fr": "French",
+    "en": "English",
+    "ar": "العربية"
+  }
 }
