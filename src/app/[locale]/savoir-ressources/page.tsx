@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import { getResources } from '@/lib/api/resources';
+export const dynamic = 'force-dynamic';
 
-export default async function Page({ params }: { params: { locale: string } }) {
-  const locale = params.locale || 'fr';
-  const data = await getResources(locale, null);
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const {locale} = await params;
+  const data = await getResources(locale || 'fr', null);
   return (
     <div>
       <h1 className="text-2xl font-semibold mb-6">Savoir & Ressources</h1>
@@ -30,4 +31,3 @@ export default async function Page({ params }: { params: { locale: string } }) {
     </div>
   );
 }
-

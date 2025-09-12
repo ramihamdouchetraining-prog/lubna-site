@@ -1,5 +1,5 @@
 {
   "Home": {"title": "Welcome to Lubna", "tagline": "Feminine & custom tailoring"},
-  "Nav": {"brand": "Lubna", "underwear": "Underwear", "girls": "Girls", "knowledge": "Knowledge & resources"},
+  "Nav": {"brand": "Lubna", "home": "Home", "underwear": "Underwear", "girls": "Girls", "knowledge": "Knowledge & resources"},
   "Lang": {"fr": "French", "en": "English", "ar": "العربية"}
 }
