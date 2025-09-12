@@ -16,3 +16,5 @@ npm run dev
 3. Mettre à jour les traductions dans le fichier JSON.
 
 Le middleware redirige par défaut vers `/fr`.
+npm run dev
+
