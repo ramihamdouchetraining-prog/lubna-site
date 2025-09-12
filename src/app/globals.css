@@ -2,4 +2,5 @@
 @tailwind components;
 @tailwind utilities;
 
+/* exemples de tokens légers pour le thème */
 :root { color-scheme: light dark; }
