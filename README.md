@@ -2,6 +2,41 @@
 
 Projet Next.js (App Router) avec TypeScript, Tailwind et i18n.
 
+## Slides Hero (Supabase manifest)
+
+### Variables d’env (racine `.env.local`)
+```
+NEXT_PUBLIC_SUPABASE_URL=https://epefjqrxjbpcasygwywh.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=…
+SUPABASE_SERVICE_ROLE_KEY=…   # ne pas commit
+ADMIN_TOKEN=dev-admin-ok       # ou garde SEED_TOKEN
+SEED_TOKEN=dev-seed-ok
+```
+
+### Démarrer en 3001
+```
+npm run dev:3001
+```
+Regarde la bannière: `Local: http://localhost:3001`.
+
+### Debug rapide
+```
+curl -s http://localhost:3001/api/dev/debug | jq .
+```
+
+### Seed des slides
+```
+curl -s -X POST -H "x-admin-token: $ADMIN_TOKEN" http://localhost:3001/api/dev/seed-slides | jq .
+```
+
+### Vérifier le manifest public
+```
+curl -s "$NEXT_PUBLIC_SUPABASE_URL/storage/v1/object/public/assets-public/home-slides/manifest.json" | jq .
+```
+
+### UI dev
+Ouvre `http://localhost:3001/fr/dev/slides` et colle le token.
+
 ## Démarrer
 
 ```bash
@@ -39,7 +74,6 @@ curl -s http://localhost:3000/api/health/supabase | jq .
 ```bash
 curl -X POST -H "x-seed-token: $SEED_TOKEN" http://localhost:3000/api/dev/seed
 ```
-
 
 ## Home 5XL — Notes rapides
 - Le **Hero** s’appuie sur des images publiques Supabase (fallback). Si tu changes de bucket/domaine, ajuste `next.config.mjs` (images.remotePatterns).
