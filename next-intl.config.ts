@@ -1,4 +1,5 @@
 export default {
   locales: ['fr', 'en', 'ar'],
-  defaultLocale: 'fr'
-};
+  defaultLocale: 'fr',
+  localePrefix: 'always'
+} as const;

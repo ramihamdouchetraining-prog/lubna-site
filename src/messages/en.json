@@ -1,17 +1,5 @@
 {
-  "Home": {
-    "title": "Welcome to Lubna",
-    "tagline": "Feminine & custom tailoring"
-  },
-  "Nav": {
-    "brand": "Lubna",
-    "underwear": "Underwear",
-    "girls": "Girls",
-    "knowledge": "Knowledge & resources"
-  },
-  "Lang": {
-    "fr": "French",
-    "en": "English",
-    "ar": "العربية"
-  }
+  "Home": {"title": "Welcome to Lubna", "tagline": "Feminine & custom tailoring"},
+  "Nav": {"brand": "Lubna", "underwear": "Underwear", "girls": "Girls", "knowledge": "Knowledge & resources"},
+  "Lang": {"fr": "French", "en": "English", "ar": "العربية"}
 }
