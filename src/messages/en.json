@@ -13,5 +13,12 @@
     "fr": "French",
     "en": "English",
     "ar": "العربية"
+  },
+  "Shop": {
+    "underwearTitle": "Underwear",
+    "girlsTitle": "Girls"
+  },
+  "Knowledge": {
+    "title": "Knowledge & resources"
   }
 }

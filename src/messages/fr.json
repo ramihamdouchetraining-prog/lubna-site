@@ -13,5 +13,12 @@
     "fr": "Français",
     "en": "English",
     "ar": "العربية"
+  },
+  "Shop": {
+    "underwearTitle": "Sous-vêtements",
+    "girlsTitle": "Petite fille"
+  },
+  "Knowledge": {
+    "title": "Savoir & ressources"
   }
 }
