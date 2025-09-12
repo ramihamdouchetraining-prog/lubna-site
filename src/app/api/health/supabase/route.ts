@@ -10,7 +10,7 @@ export async function GET() {
   }
 
   const results: Record<string, any> = {};
-  const tryQuery = async (label: string, q: () => Promise<any>) => {
+  const tryQuery = async (label: string, q: () => PromiseLike<any>) => {
     try {
       const { data, error } = await q();
       if (error) results[label] = { error: error.message };

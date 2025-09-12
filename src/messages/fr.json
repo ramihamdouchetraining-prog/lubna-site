@@ -1,5 +1,5 @@
 {
   "Home": {"title": "Bienvenue sur Lubna", "tagline": "Boutique féminine & sur-mesure"},
-  "Nav": {"brand": "Lubna", "underwear": "Sous-vêtements", "girls": "Petite fille", "knowledge": "Savoir & ressources"},
+  "Nav": {"brand": "Lubna", "home": "Accueil", "underwear": "Sous-vêtements", "girls": "Petite fille", "knowledge": "Savoir & ressources"},
   "Lang": {"fr": "Français", "en": "English", "ar": "العربية"}
 }

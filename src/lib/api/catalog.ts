@@ -1,6 +1,7 @@
 import { supabase } from '../supabaseClient';
 
 export async function getProductsByCategory(locale: string, categorySlug: string) {
+  if(!supabase) return [];
   const { data, error } = await supabase.rpc('get_products_localized', {
     p_locale: locale,
     p_category_slug: categorySlug
