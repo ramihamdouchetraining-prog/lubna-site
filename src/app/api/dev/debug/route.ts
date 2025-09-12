@@ -1,21 +1,33 @@
-import { NextResponse } from 'next/server';
+import {NextResponse} from 'next/server';
+
 export const runtime = 'nodejs';
-export async function GET() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-  const service = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-  const admin = process.env.ADMIN_TOKEN || process.env.SEED_TOKEN || '';
-  const port = process.env.PORT || 'unknown';
-  const mask = (v: string) => (v ? `${v.slice(0, 4)}…${v.slice(-4)}` : 'missing');
+
+function has(v?: string|null){return !!(v && v.length>0)}
+
+export async function GET(){
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const host = base ? base.replace(/^https?:\/\//,'').replace(/\/+$/, '') : '';
+  const manifestUrl = host ? `https://${host}/storage/v1/object/public/assets-public/home-slides/manifest.json` : null;
+
+  let probe: any = null;
+  if (manifestUrl) {
+    try {
+      const r = await fetch(manifestUrl, {cache:'no-store'});
+      probe = { ok: r.ok, status: r.status };
+    } catch (e:any) {
+      probe = { ok:false, error: String(e?.message ?? e) };
+    }
+  }
+
   return NextResponse.json({
-    runtime: process.env.NEXT_RUNTIME || 'node',
-    port,
     env: {
-      NEXT_PUBLIC_SUPABASE_URL: !!url,
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: anon ? `${anon.length} chars` : 'missing',
-      SUPABASE_SERVICE_ROLE_KEY: service ? `${service.length} chars` : 'missing',
-      ADMIN_OR_SEED_TOKEN: admin ? mask(admin) : 'missing'
+      NEXT_PUBLIC_SUPABASE_URL: has(process.env.NEXT_PUBLIC_SUPABASE_URL),
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: has(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+      SUPABASE_SERVICE_ROLE_KEY: has(process.env.SUPABASE_SERVICE_ROLE_KEY),
+      ADMIN_TOKEN: has(process.env.ADMIN_TOKEN),
+      SEED_TOKEN: has(process.env.SEED_TOKEN)
     },
-    tips: 'Use curl -s http://localhost:<port>/api/dev/debug'
+    server: { port: process.env.PORT ?? '3000' },
+    manifest: manifestUrl ? { url: manifestUrl, probe } : null
   });
 }
