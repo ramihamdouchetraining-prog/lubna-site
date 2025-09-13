@@ -15,8 +15,9 @@ export async function loadSlides(): Promise<{slides:Slide[], from:string, url:st
     const res = await fetch(url, {cache:'no-store'});
     if(!res.ok) return {slides: FALLBACK, from:`manifest:${res.status}`, url, status: res.status};
     const data = await res.json().catch(()=>null);
-    if(Array.isArray(data) && data.every(x=>typeof x?.src==='string')){
-      return {slides:data, from:'manifest', url, status: res.status};
+    const arr = Array.isArray(data) ? data : Array.isArray(data?.slides) ? data.slides : null;
+    if(arr && arr.every((x:any)=>typeof x?.src === 'string')){
+      return {slides: arr, from:'manifest', url, status: res.status};
     }
     return {slides:FALLBACK, from:'manifest:bad-json', url, status: res.status};
   }catch{
