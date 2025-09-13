@@ -1,33 +1,26 @@
 import {NextResponse} from 'next/server';
-
+import {manifestUrl} from '@/lib/slides';
 export const runtime = 'nodejs';
-
-function has(v?: string|null){return !!(v && v.length>0)}
-
 export async function GET(){
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const host = base ? base.replace(/^https?:\/\//,'').replace(/\/+$/, '') : '';
-  const manifestUrl = host ? `https://${host}/storage/v1/object/public/assets-public/home-slides/manifest.json` : null;
-
-  let probe: any = null;
-  if (manifestUrl) {
-    try {
-      const r = await fetch(manifestUrl, {cache:'no-store'});
-      probe = { ok: r.ok, status: r.status };
-    } catch (e:any) {
-      probe = { ok:false, error: String(e?.message ?? e) };
-    }
+  const env = {
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || null,
+    anonSet: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    serviceSet: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    adminSet: !!process.env.ADMIN_TOKEN,
+    seedSet: !!process.env.SEED_TOKEN
+  };
+  const url = manifestUrl();
+  let status: number | null = null;
+  let count: number | null = null;
+  if(url){
+    try{
+      const r = await fetch(url, {cache:'no-store'});
+      status = r.status;
+      if(r.ok){
+        const j = await r.json().catch(()=>null);
+        if(Array.isArray(j)) count = j.length;
+      }
+    }catch{}
   }
-
-  return NextResponse.json({
-    env: {
-      NEXT_PUBLIC_SUPABASE_URL: has(process.env.NEXT_PUBLIC_SUPABASE_URL),
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: has(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
-      SUPABASE_SERVICE_ROLE_KEY: has(process.env.SUPABASE_SERVICE_ROLE_KEY),
-      ADMIN_TOKEN: has(process.env.ADMIN_TOKEN),
-      SEED_TOKEN: has(process.env.SEED_TOKEN)
-    },
-    server: { port: process.env.PORT ?? '3000' },
-    manifest: manifestUrl ? { url: manifestUrl, probe } : null
-  });
+  return NextResponse.json({ok:true, env, manifestUrl:url, manifestStatus:status, manifestCount:count});
 }
