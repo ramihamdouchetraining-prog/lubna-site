@@ -23,3 +23,5 @@ yarn-error.log*
 coverage/
 node_modules
 .next
+
+.pid
