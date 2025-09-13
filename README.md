@@ -34,8 +34,31 @@ curl -s -X POST -H "x-admin-token: $ADMIN_TOKEN" http://localhost:3001/api/dev/s
 curl -s "$NEXT_PUBLIC_SUPABASE_URL/storage/v1/object/public/assets-public/home-slides/manifest.json" | jq .
 ```
 
-### UI dev
-Ouvre `http://localhost:3001/fr/dev/slides` et colle le token.
+### Slides Dev Panel
+
+Run on port 3001 and open the locale page:
+
+```bash
+pkill -f "next dev" 2>/dev/null || true
+npm run -s dev:3001 & echo $! > .pid && sleep 5
+open http://localhost:3001/fr/dev/slides # or /en/dev/slides, /ar/dev/slides
+```
+
+Seed with a token (matches `ADMIN_TOKEN` or `SEED_TOKEN` in `.env.local`):
+
+```bash
+curl -s -X POST -H "x-admin-token: $ADMIN_TOKEN" http://localhost:3001/api/dev/seed-slides
+# or
+curl -s -X POST -H "x-seed-token: $SEED_TOKEN"  http://localhost:3001/api/dev/seed-slides
+```
+
+Probe public manifest (should be 200 OK after seeding & bucket public):
+
+```bash
+curl -I "${NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets-public/home-slides/manifest.json" | head -n 5
+```
+
+> **Production safety**: `/api/dev/*` routes return 404 in production.
 
 ## Démarrer
 
