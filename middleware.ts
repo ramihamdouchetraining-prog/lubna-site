@@ -1,15 +1,35 @@
-import createMiddleware from 'next-intl/middleware';
-import {locales} from './src/i18n/config';
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server'
 
-export default createMiddleware({
-  locales,
-  defaultLocale: 'fr',
-  localePrefix: 'always'
-});
+// Locales supportées (aligne avec next.config.mjs)
+const LOCALES = ['fr', 'en', 'ar'] as const
+const DEFAULT = 'fr'
 
-// IMPORTANT: never match API, Next internals or static files
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
+
+  // Ne JAMAIS intercepter ces chemins
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.match(/\.[a-zA-Z0-9]+$/) // fichier statique
+  ) {
+    return NextResponse.next()
+  }
+
+  // Si le chemin commence déjà par une locale supportée -> laisser passer
+  const first = pathname.split('/')[1]
+  if (LOCALES.includes(first as any)) {
+    return NextResponse.next()
+  }
+
+  // Sinon, préfixer par la locale par défaut **en conservant le reste du chemin**
+  const url = req.nextUrl.clone()
+  url.pathname = `/${DEFAULT}${pathname}`
+  return NextResponse.redirect(url)
+}
+
 export const config = {
-  matcher: [
-    '/((?!api|_next|.*\\..*|favicon.ico).*)'
-  ]
-};
+  // même logique que ci-dessus, côté matcher
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
+}
