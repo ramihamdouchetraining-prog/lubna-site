@@ -1,12 +1,16 @@
-const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).host : null;
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
-      ...(supabaseHost ? [{protocol: 'https', hostname: supabaseHost}] : []),
+      {protocol: 'https', hostname: '**.supabase.co'},
       {protocol: 'https', hostname: 'images.unsplash.com'}
     ]
   },
   transpilePackages: []
 };
-export default nextConfig;
+
+export default withNextIntl(nextConfig);

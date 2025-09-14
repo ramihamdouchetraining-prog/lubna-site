@@ -20,7 +20,7 @@ export async function generateMetadata({params}:{params: Promise<{locale:string}
 }
 
 export default async function Home({params}:{params: Promise<{locale:string}>}){
-  const HeroSlides = (await import('@/src/components/HeroSlides')).default;
+  const HeroSlides = (await import('@/components/HeroSlides')).default;
   const {locale} = await params;
   setRequestLocale(locale);
   const t = await getTranslations('Home');
