@@ -25,7 +25,7 @@ export default function DevSlidesPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {data.slides.map((s, i) => (
           <figure key={i} className="rounded-xl overflow-hidden border">
-            <Image src={s.src} alt={s.label?.[locale] ?? `slide-${i}`} width={800} height={600} className="w-full h-auto object-cover" />
+            <Image src={s.src} alt={s.label?.[locale] ?? `slide-${i}`} width={800} height={600} unoptimized className="w-full h-auto object-cover" />
             {s.label && <figcaption className="p-2 text-sm opacity-80">{s.label[locale] ?? s.label.fr ?? s.label.en ?? s.label.ar}</figcaption>}
           </figure>
         ))}
