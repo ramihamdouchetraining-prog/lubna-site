@@ -1,16 +1,17 @@
-import createNextIntlPlugin from 'next-intl/plugin';
-
-const withNextIntl = createNextIntlPlugin();
-
+import createNextIntlPlugin from 'next-intl/plugin'
+const withNextIntl = createNextIntlPlugin()
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  i18n: {
+    locales: ['fr', 'en', 'ar'],
+    defaultLocale: 'fr',
+    localeDetection: false
+  },
   images: {
     remotePatterns: [
-      {protocol: 'https', hostname: '**.supabase.co'},
-      {protocol: 'https', hostname: 'images.unsplash.com'}
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: '**.supabase.co' }
     ]
-  },
-  transpilePackages: []
-};
-
-export default withNextIntl(nextConfig);
+  }
+}
+export default withNextIntl(nextConfig)

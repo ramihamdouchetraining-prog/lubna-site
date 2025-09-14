@@ -1,35 +1,35 @@
-/* @ts-nocheck */
-'use client'
+"use client"
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { useParams } from 'next/navigation'
 
-export default function DevSlidesPage(){
-  const [state, setState] = useState({ ok:false, count:0, from:'', slides:[], loading:true })
+type Slide = { src: string; label?: { fr?: string; en?: string; ar?: string } }
 
-  useEffect(() => { (async () => {
-    try {
-      const r = await fetch('/api/dev/slides', { cache: 'no-store' })
-      const j = await r.json()
-      setState({ ...j, loading: false })
-    } catch (e) {
-      setState(s => ({ ...s, loading:false, err:String(e) }))
-    }
-  })() }, [])
+type Payload = { ok: boolean; count: number; from: 'manifest'|'fallback'; slides: Slide[] }
 
-  if (state.loading) return <div style={{ padding:24 }}>Chargement…</div>
-
+export default function DevSlidesPage() {
+  const { locale } = useParams() as { locale: 'fr'|'en'|'ar' }
+  const [data, setData] = useState<Payload | null>(null)
+  const [err, setErr] = useState<string | null>(null)
+  useEffect(() => {
+    fetch('/api/dev/slides', { cache: 'no-store' })
+      .then(r => r.json())
+      .then((j:Payload) => setData(j))
+      .catch(e => setErr(String(e)))
+  }, [])
+  if (err) return <div className="p-6">Erreur: {err}</div>
+  if (!data) return <div className="p-6">Chargement…</div>
   return (
-    <div style={{ padding:24 }}>
-      <h1>Slides Dev Panel</h1>
-      <pre>{JSON.stringify({ ok:state.ok, count:state.count, from:state.from }, null, 2)}</pre>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:16 }}>
-        {(state.slides || []).map((s:any,i:number) => (
-          <figure key={i}>
-            <img src={s.src} alt={s.label?.fr || `slide-${i}`} style={{ width:'100%', height:160, objectFit:'cover', borderRadius:12 }} />
-            <figcaption style={{ marginTop:8 }}>{s.label?.fr || s.src}</figcaption>
+    <main className="p-6 space-y-4">
+      <h1 className="text-xl font-semibold">Slides: {data.from} ({data.count})</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {data.slides.map((s, i) => (
+          <figure key={i} className="rounded-xl overflow-hidden border">
+            <Image src={s.src} alt={s.label?.[locale] ?? `slide-${i}`} width={800} height={600} className="w-full h-auto object-cover" />
+            {s.label && <figcaption className="p-2 text-sm opacity-80">{s.label[locale] ?? s.label.fr ?? s.label.en ?? s.label.ar}</figcaption>}
           </figure>
         ))}
       </div>
-    </div>
+    </main>
   )
 }
-

@@ -1,26 +1,24 @@
-export type Slide = { src:string; alt:string; href?:string; label?:string };
+export type Slide = { src: string; label?: { fr?: string; en?: string; ar?: string } }
 const FALLBACK: Slide[] = [
-  {src:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f', alt:'Look 1'},
-  {src:'https://images.unsplash.com/photo-1514996937319-344454492b37', alt:'Look 2'},
-  {src:'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb', alt:'Look 3'}
-];
-export function manifestUrl(){
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  return base ? `${base}/storage/v1/object/public/assets-public/home-slides/manifest.json` : null;
+  { src: 'https://images.unsplash.com/photo-1549298916-b41d501d3772', label: { fr: 'Élégance', en: 'Elegance', ar: 'أناقة' } },
+  { src: 'https://images.unsplash.com/photo-1520975693416-35a7baa90b69', label: { fr: 'Confort',  en: 'Comfort',  ar: 'راحة' } },
+  { src: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f', label: { fr: 'Création', en: 'Creation', ar: 'إبداع' } }
+]
+export function buildManifestUrl(): string | null {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/+$/, '')
+  return base ? `${base}/storage/v1/object/public/assets-public/home-slides/manifest.json` : null
 }
-export async function loadSlides(): Promise<{slides:Slide[], from:string, url:string|null, status:number|null}>{
-  const url = manifestUrl();
-  if(!url) return {slides: FALLBACK, from:'fallback', url, status: null};
-  try{
-    const res = await fetch(url, {cache:'no-store'});
-    if(!res.ok) return {slides: FALLBACK, from:`manifest:${res.status}`, url, status: res.status};
-    const data = await res.json().catch(()=>null);
-    const arr = Array.isArray(data) ? data : Array.isArray(data?.slides) ? data.slides : null;
-    if(arr && arr.every((x:any)=>typeof x?.src === 'string')){
-      return {slides: arr, from:'manifest', url, status: res.status};
-    }
-    return {slides:FALLBACK, from:'manifest:bad-json', url, status: res.status};
-  }catch{
-    return {slides:FALLBACK, from:'fallback:error', url, status: null};
+export async function loadSlides(): Promise<{ slides: Slide[]; from: 'manifest' | 'fallback' }> {
+  const url = buildManifestUrl()
+  if (!url) return { slides: FALLBACK, from: 'fallback' }
+  try {
+    const res = await fetch(url, { cache: 'no-store' })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const json = await res.json()
+    const arr: Slide[] = Array.isArray(json) ? json : Array.isArray(json?.slides) ? json.slides : []
+    if (!arr.length) throw new Error('empty manifest')
+    return { slides: arr, from: 'manifest' }
+  } catch {
+    return { slides: FALLBACK, from: 'fallback' }
   }
 }

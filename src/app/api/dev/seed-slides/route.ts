@@ -19,9 +19,9 @@ export async function POST(req:Request){
   }
   const supabase = createClient(url, service);
   const slides: Slide[] = [
-    {src:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f', alt:'Slide A'},
-    {src:'https://images.unsplash.com/photo-1514996937319-344454492b37', alt:'Slide B'},
-    {src:'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb', alt:'Slide C'}
+    {src:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f', label:{fr:'Slide A'}},
+    {src:'https://images.unsplash.com/photo-1514996937319-344454492b37', label:{fr:'Slide B'}},
+    {src:'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb', label:{fr:'Slide C'}}
   ];
   const body = new Blob([JSON.stringify(slides, null, 2)], {type:'application/json'});
   const {error} = await supabase.storage.from('assets-public').upload('home-slides/manifest.json', body, {upsert:true, contentType:'application/json'});
