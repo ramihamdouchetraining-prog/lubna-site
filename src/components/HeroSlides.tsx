@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { loadSlides } from '@/src/lib/slides';
+import { loadSlides } from '@/lib/slides';
 
 export default async function HeroSlides() {
-  const slides = await loadSlides();
+  const { slides } = await loadSlides();
   return (
     <section className="relative overflow-hidden">
       <div className="grid grid-cols-1 gap-4">
